@@ -10,6 +10,8 @@ headers = {
     'User-Agent' : ua.random
 }
 
+#TODO: get all sibling elements of <div class="panel-body"> parent. currently getting first (which is helen newman)
+
 url = os.environ.get('url', None)
 
 if url:
