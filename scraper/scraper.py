@@ -1,6 +1,7 @@
 import requests
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
+import os
 
 
 ua = UserAgent() #to bypass Mod_Security --> bot prevention
@@ -9,7 +10,12 @@ headers = {
     'User-Agent' : ua.random
 }
 
-r = requests.get("https://connect2concepts.com/connect2/?type=circle&key=355de24d-d0e4-4262-ae97-bc0c78b92839&loc_status=false", headers=headers)
+url = os.environ.get('url', None)
+
+if url:
+    r = requests.get(url, headers=headers)
+else:
+    raise Exception("Please specify the url in environment variables. Variable name 'url'.")
 
 print(r) #gives status code of response received, 200 --> successful response
 
@@ -27,5 +33,9 @@ else:
     print('Element not found.')    
 
 print(data_lastcount,data_percent)
+
+#TODO: save data in a database with date included
+
+
 
     
