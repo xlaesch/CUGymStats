@@ -1,0 +1,242 @@
+Response [200]>
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Connect2
+  </title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+  <link href="css/jquery.barCharts.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="container" id="container">
+   <div class="row">
+    <h2 class="heading-text">
+     <center>
+      Live Facility Counts
+     </center>
+    </h2>
+   </div>
+   <hr/>
+   <div class="row">
+    <form class="form-inline" id="frmWidget" method="POST" target="_self">
+     <div class="col-xl-12 col-sm-8 col-md-8">
+      <div class="form-group form-inline col-xl-12 col-sm-12 col-md-12">
+       <label class="selectFacility" for="facility">
+        Select Facility:
+       </label>
+       <input id="key" name="key" type="hidden" value="355de24d-d0e4-4262-ae97-bc0c78b92839"/>
+       <input id="type" name="type" type="hidden" value="circle"/>
+       <select class="form-control" id="facility" name="facility" onchange="this.form.submit()">
+        <option selected="" value="All">
+         All
+        </option>
+        <option value="1180">
+         Helen Newman Hall
+        </option>
+        <option value="1183">
+         Noyes Community Recreation Center
+        </option>
+        <option value="1179">
+         Teagle Fitness Centers
+        </option>
+        <option value="1550">
+         Toni Morrison Fitness Center
+        </option>
+       </select>
+      </div>
+     </div>
+     <div class="col-xl-12 col-sm-4 col-md-4">
+      <div class="form-group form-inline col-xl-12 col-sm-12 col-md-12">
+       <button class="btn btn-sm btn-primary pull-right" id="btnSubmit" name="btnSubmit" type="button">
+        Refresh Count
+       </button>
+      </div>
+     </div>
+    </form>
+   </div>
+   <hr/>
+   <div class="row" style="display:block">
+    <div class="col-sm-12 col-md-12">
+     <div class="panel-group">
+      <div class="panel panel-default">
+       <div class="panel-heading">
+        Location Count (Circle Chart)
+       </div>
+       <div class="panel-body">
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#2A5B84" data-isclosed="" data-lastcount="40" data-percent="40">
+          </div>
+          <div style="text-align:center;">
+           Helen Newman Fitness Center
+           <br/>
+           Last Count: 32
+           <br/>
+           Updated: 01/11/2025 03:50 PM
+          </div>
+         </center>
+        </div>
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#FFF200" data-isclosed="1" data-lastcount="0" data-percent="0">
+          </div>
+          <div style="text-align:center;">
+           Noyes Fitness Center
+           <br/>
+           Last Count: 0
+           <br/>
+           Updated: 12/20/2024 09:09 PM
+          </div>
+         </center>
+        </div>
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#2A5B84" data-isclosed="" data-lastcount="0" data-percent="0">
+          </div>
+          <div style="text-align:center;">
+           Teagle Down Fitness Center
+           <br/>
+           Last Count: 0
+           <br/>
+           Updated: 01/10/2025 04:28 PM
+          </div>
+         </center>
+        </div>
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#FFF200" data-isclosed="1" data-lastcount="0" data-percent="0">
+          </div>
+          <div style="text-align:center;">
+           Teagle Up Fitness Center
+           <br/>
+           Last Count: 0
+           <br/>
+           Updated: 01/10/2025 04:30 PM
+          </div>
+         </center>
+        </div>
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#FFF200" data-isclosed="1" data-lastcount="0" data-percent="0">
+          </div>
+          <div style="text-align:center;">
+           Toni Morrison Fitness Center
+           <br/>
+           Last Count: 0
+           <br/>
+           Updated: 12/20/2024 09:10 PM
+          </div>
+         </center>
+        </div>
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#2A5B84" data-isclosed="" data-lastcount="30" data-percent="30">
+          </div>
+          <div style="text-align:center;">
+           HNH Court 1 Basketball
+           <br/>
+           Last Count: 6
+           <br/>
+           Updated: 01/11/2025 04:03 PM
+          </div>
+         </center>
+        </div>
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#ed1c24" data-isclosed="" data-lastcount="112.5" data-percent="100">
+          </div>
+          <div style="text-align:center;">
+           HNH Court 2 Volleyball/Badminton
+           <br/>
+           Last Count: 18
+           <br/>
+           Updated: 01/11/2025 04:20 PM
+          </div>
+         </center>
+        </div>
+        <div class="col-md-3 col-sm-6">
+         <center>
+          <div class="circleChart" data-fcolor="#FFF200" data-isclosed="1" data-lastcount="0" data-percent="0">
+          </div>
+          <div style="text-align:center;">
+           Noyes Court Basketball
+           <br/>
+           Last Count: 0
+           <br/>
+           Updated: 12/22/2024 04:27 PM
+          </div>
+         </center>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12 col-sm-12">
+     <center>
+      Powered by
+      <a href="http://www.connect2concepts.com/" target="_blank">
+       Connect2Concepts
+      </a>
+     </center>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
+<script src="js/jquery-3.1.0.min.js">
+</script>
+<script src="js/bootstrap.js">
+</script>
+<script src="js/jquery.circlechart_v1.0.0.js">
+</script>
+<script src="js/jquery.easing.min.js">
+</script>
+<script src="js/jquery.barChart.js">
+</script>
+<script>
+ jQuery('.barChart').barChart({
+        easing: 'easeOutQuart'
+    });
+</script>
+<script>
+ var refresh_interval = 1200;
+    $('.circleChart').each(function(value, index) {
+        var fcolor = $(this).data('fcolor');
+        $(this).percentcircle({
+            animate: true,
+            diameter: 100,
+            guage: 3,
+            coverBg: '#fff',
+            bgColor: '#efefef',
+            fillColor: fcolor,
+            percentSize: '18px',
+            percentWeight: 'normal'
+        })
+    });
+    $("#btnSubmit").click(function() {
+        $(this).html("Refreshing.....");
+        $(this).addClass('disabled');
+        $("#frmWidget").submit();
+    });
+    /*setInterval(function() {
+        refresh_interval = refresh_interval - 1;
+        var min = Math.floor(refresh_interval / 60);
+        var seconds = refresh_interval % 60;
+        if (min < 10) {
+            min = "0" + min;
+        }
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+
+        $('#timer').text(min + ':' + seconds);
+        if (refresh_interval == 0) {
+            $("#frmWidget").submit();
+        }
+    }, 1000);*/
+</script>
