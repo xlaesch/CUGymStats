@@ -56,8 +56,3 @@ cur.execute('''CREATE TABLE IF NOT EXISTS helen_newman
 cur.execute("INSERT INTO helen_newman(lastcount, percent, timestamp) VALUES (?,?,?)", (data_lastcount,data_percent,data_timestamp))
 con.commit()
 con.close()
-
-
-
-
-    
