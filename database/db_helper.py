@@ -33,4 +33,5 @@ def get_day_of_week(year_code, month_code, century_code, date_number, leapyear_c
     return (year_code + month_code + century_code + date_number - leapyear_code) % 7
 
 
-
+def insert_new_data(data):
+    pass #waiting for proper data record

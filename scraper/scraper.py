@@ -28,19 +28,20 @@ soup = BeautifulSoup(r.content, 'html.parser')
 helen_newman_data = soup.select_one('.col-md-3.col-sm-6 .circleChart')
 print(helen_newman_data)
 
-#TODO: make sure to get the timestamp as well
-
 if helen_newman_data:
     data_lastcount = helen_newman_data.get('data-lastcount')
     data_percent = helen_newman_data.get('data-percent')
 else:
     print('Element not found.')
     
-data_lastcount = 40
-data_percent = 50
-data_timestamp = "2025-01-14 18:17:54"
-
-print(data_lastcount,data_percent)
+data = {
+    'location' : 'helen_newman',
+    'data_lastcount' : 40,
+    'data_percent' : 50,
+    'data_timestamp' : "2025-01-14 18:17:54"
+} #how all data should be saved from parsed html
+    
+print(data)
 
 #TODO: save data in a database with date included
 con = sqlite3.connect("database/data.db") # connection to the db
