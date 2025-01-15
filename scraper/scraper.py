@@ -43,7 +43,6 @@ data = {
     
 print(data)
 
-#TODO: save data in a database with date included
 con = sqlite3.connect("database/data.db") # connection to the db
 cur = con.cursor() #cursor creation
 
