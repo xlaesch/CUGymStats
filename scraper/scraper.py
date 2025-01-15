@@ -52,4 +52,5 @@ cur.execute('''CREATE TABLE IF NOT EXISTS helen_newman
                (id INTEGER PRIMARY KEY AUTOINCREMENT,
                 lastcount INTEGER,
                 percent INTEGER,
-                timestamp TEXT)''')
+                timestamp TEXT,
+                dayofweek INTEGER)''')

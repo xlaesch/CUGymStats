@@ -3,7 +3,7 @@ import sqlite3
 #TODO: add helper functions --> average out for given time/day 
 
 
-month_code = {
+month_code_map = {
     '01' : 0,
     '02' : 3,
     '03' : 3,
@@ -36,13 +36,28 @@ def get_day_of_week(year_code, month_code, century_code, date_number, leapyear_c
 
 
 def insert_new_data(data):
+    
+    #Find day of week
+    year = data['data_timestamp'][0:4]
+    year_code = get_year_code(year)
+    month_code = month_code_map[data['data_timestamp'][5:7]]
+    date_number = data['data_timestamp'][8:10]
+    leapyear_code = get_leapyear_code(data['data_timestamp'][0:4])
+    dayofweek = get_day_of_week(year_code,month_code,century_code,date_number,leapyear_code)
+    
+    #Connect to database
     print('Attempting connection to database...')
     con = sqlite3.connect('database/data.db')
     print('Successful connection!')
     cur = con.cursor()
+    
+    #Inserting new data
     print('Attempting to insert new data...')
-    cur.execute(f'''INSERT INTO {data['location']}(lastcount,percent,timestamp)
-                VALUES (?,?,?)''', (data['data_lastcount'], data['data_percent'], data['data_timestamp']))
+    cur.execute(f'''INSERT INTO {data['location']}(lastcount,percent,timestamp,daysofweek)
+                VALUES (?,?,?)''', (data['data_lastcount'], data['data_percent'], data['data_timestamp'], dayofweek))
     con.commit()
     con.close()
     print('Successful insertion!')
+
+def get_average_for_day(dayofweek):
+    pass
