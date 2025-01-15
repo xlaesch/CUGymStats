@@ -1,3 +1,5 @@
+import sqlite3
+
 #TODO: add helper functions --> average out for given time/day 
 
 
@@ -34,4 +36,13 @@ def get_day_of_week(year_code, month_code, century_code, date_number, leapyear_c
 
 
 def insert_new_data(data):
-    pass #waiting for proper data record
+    print('Attempting connection to database...')
+    con = sqlite3.connect('database/data.db')
+    print('Successful connection!')
+    cur = con.cursor()
+    print('Attempting to insert new data...')
+    cur.exectue(f'''INSERT INTO {data['location']}(lastcount,percent,timestamp)
+                VALUES ({data['lastcount'],data['percent'],data['timestamp']})''')
+    con.commit()
+    con.close()
+    print('Successful insertion!')
