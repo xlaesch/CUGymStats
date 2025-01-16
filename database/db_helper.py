@@ -1,8 +1,5 @@
 import sqlite3
 
-#TODO: add helper functions --> average out for given time/day 
-
-
 month_code_map = {
     '01' : 0,
     '02' : 3,
@@ -44,6 +41,7 @@ def insert_new_data(data):
     date_number = data['data_timestamp'][8:10]
     leapyear_code = get_leapyear_code(data['data_timestamp'][0:4])
     dayofweek = get_day_of_week(year_code,month_code,century_code,date_number,leapyear_code)
+    hour = data['data_timestamp'][11:14] #this would be a round down
     
     #Connect to database
     print('Attempting connection to database...')
@@ -54,10 +52,49 @@ def insert_new_data(data):
     #Inserting new data
     print('Attempting to insert new data...')
     cur.execute(f'''INSERT INTO {data['location']}(lastcount,percent,timestamp,daysofweek)
-                VALUES (?,?,?)''', (data['data_lastcount'], data['data_percent'], data['data_timestamp'], dayofweek))
+                VALUES (?,?,?)''', (data['data_lastcount'], data['data_percent'], data['data_timestamp'], dayofweek, hour))
     con.commit()
     con.close()
     print('Successful insertion!')
 
 def get_average_for_day(dayofweek):
-    pass
+    # Connect to database
+    print('Attempting connection to database...')
+    con = sqlite3.connect('database/data.db')
+    print('Successful connection!')
+    cur = con.cursor()
+    
+    # Find values for day of week
+    print('Attempting to find data...')
+    cur.execute('''SELECT AVG(percent)
+                   FROM helen_newman
+                   WHERE dayOfWeek = ?''', (str(dayofweek))) #TODO: when deploying the database, remember that this has to be changed to just its integer not string since the type of the column will be changed
+    
+    avg = cur.fetchone()[0]
+    con.close()
+    
+    if avg:
+        print('Was able to find!')
+    
+    return avg
+
+print(get_average_for_day(3))
+
+def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
+    # Connect to database
+    print('Attempting connection to database...')
+    con = sqlite3.connect('database/data.db')
+    print('Successful connection!')
+    cur = con.cursor()
+    
+    # Find values for day of week
+    print('Attempting to find data...')
+    cur.execute('''SELECT AVG(percent)
+                   FROM helen_newman
+                   WHERE dayOfWeek = ? AND hour = ?, ''', (str(dayofweek), hour)) #TODO: when deploying the database, remember that this has to be changed to just its integer not string since the type of the column will be changed
+    
+    avg = cur.fetchone()[0]
+    con.close()
+    
+    
+    
