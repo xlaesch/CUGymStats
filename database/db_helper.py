@@ -66,19 +66,19 @@ def get_average_for_day(dayofweek):
     
     # Find values for day of week
     print('Attempting to find data...')
-    cur.execute('''SELECT AVG(percent)
-                   FROM helen_newman
-                   WHERE dayOfWeek = ?''', (str(dayofweek))) #TODO: when deploying the database, remember that this has to be changed to just its integer not string since the type of the column will be changed
+    cur.execute('''SELECT hour, AVG(percentage) AS avg_percentage
+                FROM gym_data
+                WHERE dayofweek = ?
+                GROUP BY hour
+                ORDER BY hour;''', (str(dayofweek))) #TODO: when deploying the database, remember that this has to be changed to just its integer not string since the type of the column will be changed
     
-    avg = cur.fetchone()[0]
+    data = cur.fetchall()
     con.close()
     
-    if avg:
+    if data:
         print('Was able to find!')
     
-    return avg
-
-print(get_average_for_day(3))
+    return data
 
 def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     # Connect to database
@@ -96,5 +96,8 @@ def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     avg = cur.fetchone()[0]
     con.close()
     
+    if avg:
+        print('Was able to find!')
     
+    return avg
     
