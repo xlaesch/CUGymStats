@@ -54,3 +54,6 @@ cur.execute('''CREATE TABLE IF NOT EXISTS helen_newman
                 timestamp TEXT,
                 dayofweek INTEGER,
                 hour INTEGER)''')
+
+def get_all_gym_names():
+    pass #TODO: helper function to find out how many tables to create and put names in list
