@@ -1,6 +1,13 @@
 from flask import Flask, jsonify, request
 import sqlite3
-from database.db_helper import get_average_for_day
+try:
+    from ..database.db_helper import get_average_for_day
+except ImportError:
+    print('Import Error! Trying again...')
+    import sys
+    sys.path.append('..')
+    from database.db_helper import get_average_for_day
+
 
 app = Flask(__name__)
 #TODO: add a way to specify which table to get stats from different gyms
@@ -8,7 +15,7 @@ app = Flask(__name__)
 
 @app.route("/api/gymstats", methods=['GET']) #tell Flask what URL should trigger function, specified method GET
 def get_gym_stats():
-    con = sqlite3.connect("database/data.db")
+    con = sqlite3.connect("../database/data.db")
     cur = con.cursor()
     
     cur.execute('''SELECT *
@@ -33,6 +40,7 @@ def average_occupancy():
     result = [{'hour': row[0], 'avg_percentage': row[1] } for row in data]
     
     return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -15,6 +15,8 @@ def init_table(table_name: str):
     
     con.close()
 
+#TODO: make a helper function to connect to the database, so we'll only have to change the path on one function
+
 month_code_map = {
     '01' : 0,
     '02' : 3,
@@ -60,7 +62,7 @@ def insert_new_data(data):
     
     #Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('backend/database/data.db')
+    con = sqlite3.connect('../database/data.db')
     print('Successful connection!')
     cur = con.cursor()
     
@@ -75,17 +77,17 @@ def insert_new_data(data):
 def get_average_for_day(dayofweek):
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('backend/database/data.db')
+    con = sqlite3.connect('../database/data.db')
     print('Successful connection!')
     cur = con.cursor()
     
     # Find values for day of week
     print('Attempting to find data...')
-    cur.execute('''SELECT hour, AVG(percentage) AS avg_percentage
-                FROM gym_data
+    cur.execute('''SELECT hour, AVG(percent) AS avg_percentage
+                FROM helen_newman
                 WHERE dayofweek = ?
                 GROUP BY hour
-                ORDER BY hour;''', (str(dayofweek))) #TODO: when deploying the database, remember that this has to be changed to just its integer not string since the type of the column will be changed
+                ORDER BY hour;''', (dayofweek)) 
     
     data = cur.fetchall()
     con.close()
@@ -98,7 +100,7 @@ def get_average_for_day(dayofweek):
 def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('backend/database/data.db')
+    con = sqlite3.connect('../database/data.db')
     print('Successful connection!')
     cur = con.cursor()
     
@@ -106,7 +108,7 @@ def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     print('Attempting to find data...')
     cur.execute('''SELECT AVG(percent)
                    FROM helen_newman
-                   WHERE dayOfWeek = ? AND hour = ?, ''', (str(dayofweek), hour)) #TODO: when deploying the database, remember that this has to be changed to just its integer not string since the type of the column will be changed
+                   WHERE dayOfWeek = ? AND hour = ?, ''', (dayofweek, hour)) 
     
     avg = cur.fetchone()[0]
     con.close()
