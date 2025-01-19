@@ -1,5 +1,20 @@
 import sqlite3
 
+def init_table(table_name: str):
+    con = sqlite3.connect("backend/database/data.db") # connection to the db
+    cur = con.cursor() #cursor creation
+
+    # Create table if it does not exist
+    cur.execute(f'''CREATE TABLE IF NOT EXISTS {table_name}
+                (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    lastcount INTEGER,
+                    percent INTEGER,
+                    timestamp TEXT,
+                    dayofweek INTEGER,
+                    hour INTEGER)''')
+    
+    con.close()
+
 month_code_map = {
     '01' : 0,
     '02' : 3,
@@ -45,7 +60,7 @@ def insert_new_data(data):
     
     #Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('database/data.db')
+    con = sqlite3.connect('backend/database/data.db')
     print('Successful connection!')
     cur = con.cursor()
     
@@ -60,7 +75,7 @@ def insert_new_data(data):
 def get_average_for_day(dayofweek):
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('database/data.db')
+    con = sqlite3.connect('backend/database/data.db')
     print('Successful connection!')
     cur = con.cursor()
     
@@ -83,7 +98,7 @@ def get_average_for_day(dayofweek):
 def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('database/data.db')
+    con = sqlite3.connect('backend/database/data.db')
     print('Successful connection!')
     cur = con.cursor()
     
