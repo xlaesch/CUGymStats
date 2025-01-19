@@ -1,7 +1,10 @@
 import sqlite3
 
+def get_db_connection():
+    return sqlite3.connect("backend/database/data.db")
+
 def init_table(table_name: str):
-    con = sqlite3.connect("data.db") # connection to the db
+    con = get_db_connection()
     cur = con.cursor() #cursor creation
 
     # Create table if it does not exist
@@ -62,7 +65,7 @@ def insert_new_data(data):
     
     #Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('data.db')
+    con = get_db_connection()
     print('Successful connection!')
     cur = con.cursor()
     
@@ -77,7 +80,7 @@ def insert_new_data(data):
 def get_average_for_day(dayofweek):
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('data.db')
+    con = get_db_connection()
     print('Successful connection!')
     cur = con.cursor()
     
@@ -100,7 +103,7 @@ def get_average_for_day(dayofweek):
 def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('data.db')
+    con = get_db_connection()
     print('Successful connection!')
     cur = con.cursor()
     
@@ -119,4 +122,4 @@ def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     return avg
     
 if __name__ == '__main__':
-    print(get_average_for_day(0))
+    pass

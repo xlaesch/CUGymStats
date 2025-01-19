@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import sqlite3
-from database.db_helper import get_average_for_day
+from database.db_helper import get_average_for_day,get_db_connection
 
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route("/api/gymstats", methods=['GET']) #tell Flask what URL should trigger function, specified method GET
 def get_gym_stats():
-    con = sqlite3.connect("backend/database/data.db")
+    con = get_db_connection()
     cur = con.cursor()
     
     cur.execute('''SELECT *
