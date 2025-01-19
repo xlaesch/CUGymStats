@@ -19,41 +19,6 @@
         <p>&copy; 2025 CUGymStats</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Average Occupancy',
-                    data: [],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        async function fetchData() {
-            const response = await fetch('/api/average-occupancy?dayofweek=0');
-            const data = await response.json();
-
-            const labels = data.map(item => item.hour);
-            const avgPercentages = data.map(item => item.avg_percentage);
-
-            myChart.data.labels = labels;
-            myChart.data.datasets[0].data = avgPercentages;
-            myChart.update();
-        }
-
-        fetchData();
-    </script>
+    <script src="js/chart.js"></script>
 </body>
 </html>
