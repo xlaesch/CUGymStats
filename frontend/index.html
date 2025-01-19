@@ -12,7 +12,7 @@
     <main>
         <section id="gym-stats">
             <h2>Gym Statistics</h2>
-        <canvas id="myChart" width="400" height="400"></canvas>
+            <canvas id="myChart" width="400" height="400"></canvas>
         </section>
     </main>
     <footer>
@@ -20,26 +20,40 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('myChart');
+        const ctx = document.getElementById('myChart').getContext('2d');
 
-        new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-            y: {
-                beginAtZero: true
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Average Occupancy',
+                    data: [],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
-            }
-        }
         });
+
+        async function fetchData() {
+            const response = await fetch('/api/average-occupancy?dayofweek=0');
+            const data = await response.json();
+
+            const labels = data.map(item => item.hour);
+            const avgPercentages = data.map(item => item.avg_percentage);
+
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = avgPercentages;
+            myChart.update();
+        }
+
+        fetchData();
     </script>
 </body>
 </html>

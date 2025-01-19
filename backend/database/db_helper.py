@@ -1,7 +1,7 @@
 import sqlite3
 
 def init_table(table_name: str):
-    con = sqlite3.connect("backend/database/data.db") # connection to the db
+    con = sqlite3.connect("data.db") # connection to the db
     cur = con.cursor() #cursor creation
 
     # Create table if it does not exist
@@ -62,7 +62,7 @@ def insert_new_data(data):
     
     #Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('../database/data.db')
+    con = sqlite3.connect('data.db')
     print('Successful connection!')
     cur = con.cursor()
     
@@ -77,17 +77,17 @@ def insert_new_data(data):
 def get_average_for_day(dayofweek):
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('../database/data.db')
+    con = sqlite3.connect('data.db')
     print('Successful connection!')
     cur = con.cursor()
     
     # Find values for day of week
     print('Attempting to find data...')
     cur.execute('''SELECT hour, AVG(percent) AS avg_percentage
-                FROM helen_newman
+                FROM helen_newman 
                 WHERE dayofweek = ?
                 GROUP BY hour
-                ORDER BY hour;''', (dayofweek)) 
+                ORDER BY hour;''', (dayofweek)) #TODO: figure out why it's saying no such table for helen_newman??
     
     data = cur.fetchall()
     con.close()
@@ -100,7 +100,7 @@ def get_average_for_day(dayofweek):
 def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     # Connect to database
     print('Attempting connection to database...')
-    con = sqlite3.connect('../database/data.db')
+    con = sqlite3.connect('data.db')
     print('Successful connection!')
     cur = con.cursor()
     
@@ -118,3 +118,5 @@ def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
     
     return avg
     
+if __name__ == '__main__':
+    print(get_average_for_day(0))
