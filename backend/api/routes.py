@@ -1,12 +1,7 @@
 from flask import Flask, jsonify, request
 import sqlite3
-try:
-    from ..database.db_helper import get_average_for_day
-except ImportError:
-    print('Import Error! Trying again...')
-    import sys
-    sys.path.append('..')
-    from database.db_helper import get_average_for_day
+from database.db_helper import get_average_for_day
+
 
 
 app = Flask(__name__)
@@ -33,7 +28,7 @@ def get_gym_stats():
         
 @app.route('/api/average-occupancy', methods=['GET'])
 def average_occupancy():
-    day_of_week = request.args.get('dayofweek') #GET request would be --> http://example.com/api/average-occupancy?dayofweek=Monday
+    day_of_week = request.args.get('dayofweek') #GET request would be --> http://example.com/api/average-occupancy?dayofweek=0
     
     data = get_average_for_day(day_of_week)
     
