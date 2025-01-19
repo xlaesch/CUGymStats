@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import sqlite3
 from database.db_helper import get_average_for_day,get_db_connection
 
 
 app = Flask(__name__)
 #TODO: add a way to specify which table to get stats from different gyms
-#TODO: add an API, or some form of authentication
+#TODO: add form of authentication
+CORS(app)
 
 @app.route("/api/gymstats", methods=['GET']) #tell Flask what URL should trigger function, specified method GET
 def get_gym_stats():
