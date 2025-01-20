@@ -2,7 +2,7 @@
 
 ## Overview
 
-CUGymStats is a web application that provides real-time statistics and historical data on gym occupancy at Cornell University. The application consists of a backend that scrapes data from the gym's website and a frontend that displays the data in a user-friendly format.
+CUGymStats is a web application that provides real-time statistics and historical data on gym occupancy at Cornell. The application consists of a backend that scrapes data from the gym's website and a frontend that displays the data in a user-friendly format.
 
 ## Features
 
