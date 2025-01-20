@@ -1,8 +1,26 @@
 # CUGymStats
 
+[![Abblix OIDC Server](https://resources.abblix.com/imgs/jpg/abblix-oidc-server-github-banner.jpg)](https://www.abblix.com/abblix-oidc-server)
+[![.NET](https://img.shields.io/badge/.NET-6.0%2C%207.0%2C%208.0%2C%209.0-512BD4)](https://docs.abblix.com/docs/technical-requirements)
+[![language](https://img.shields.io/badge/language-C%23-239120)](https://learn.microsoft.com/ru-ru/dotnet/csharp/tour-of-csharp/overview)
+[![OS](https://img.shields.io/badge/OS-linux%2C%20windows%2C%20macOS-0078D4)](https://docs.abblix.com/docs/technical-requirements)
+[![CPU](https://img.shields.io/badge/CPU-x86%2C%20x64%2C%20ARM%2C%20ARM64-FF8C00)](https://docs.abblix.com/docs/technical-requirements)
+
 ## Overview
 
 CUGymStats is a web application that provides real-time statistics and historical data on gym occupancy at Cornell. The application consists of a backend that scrapes data from the gym's website and a frontend that displays the data in a user-friendly format.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
