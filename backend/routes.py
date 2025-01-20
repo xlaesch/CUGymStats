@@ -1,16 +1,23 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-import sqlite3
+import os
 from database.db_helper import get_average_for_day,get_db_connection
 
 
 app = Flask(__name__)
 #TODO: add a way to specify which table to get stats from different gyms
-#TODO: add form of authentication
 CORS(app)
+
+API_KEY = os.getenv('API_KEY')
+
+def authenticate_request():
+    api_key = request.headers.get('x-api-key')
+    if api_key != API_KEY:
+        abort(401, description='Unauthorized')
 
 @app.route("/api/gymstats", methods=['GET']) #tell Flask what URL should trigger function, specified method GET
 def get_gym_stats():
+    authenticate_request()
     con = get_db_connection()
     cur = con.cursor()
     
@@ -29,6 +36,7 @@ def get_gym_stats():
         
 @app.route('/api/average-occupancy', methods=['GET'])
 def average_occupancy():
+    authenticate_request()
     day_of_week = request.args.get('dayofweek') #GET request would be --> http://example.com/api/average-occupancy?dayofweek=0
     
     data = get_average_for_day(day_of_week)
