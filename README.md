@@ -1,9 +1,8 @@
 # CUGymStats
 
-[![Abblix OIDC Server](https://resources.abblix.com/imgs/jpg/abblix-oidc-server-github-banner.jpg)](https://www.abblix.com/abblix-oidc-server)
-[![status](https://img.shields.io/badge/status-in_development)]
+![status](https://img.shields.io/badge/status-in_development)
 [![language](https://img.shields.io/badge/language-python3%2E13%2E1-blue)](https://www.python.org/)
-[![release](https://img.shields.io/badge/release-pre--dev)]
+![release](https://img.shields.io/badge/release-pre--dev)
 [![GitHub last commit](https://img.shields.io/github/last-commit/xlaesch/CUGymStats)](#)
 
 ## Overview
