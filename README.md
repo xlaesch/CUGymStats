@@ -88,4 +88,4 @@ CUGymStats is a web application that provides real-time statistics and historica
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for more details.
