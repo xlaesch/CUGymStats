@@ -21,10 +21,13 @@ const myChart = new Chart(ctx, {
 
 async function fetchData() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/api/average-occupancy?dayofweek=0');
-        console.log('Response:', response);
+        const d = new Date();
+        let day = d.getDay();
+        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        document.getElementById('dayOfWeek').innerText = `Data for: ${daysOfWeek[day]}`;
+
+        const response = await fetch(`http://127.0.0.1:5000/api/average-occupancy?dayofweek=${day}`);
         const data = await response.json();
-        console.log('Data:', data);
 
         const labels = data.map(item => item.hour);
         const avgPercentages = data.map(item => item.avg_percentage);
