@@ -26,9 +26,13 @@ async function fetchData() {
         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         document.getElementById('dayOfWeek').innerText = `Data for: ${daysOfWeek[day]}`;
 
+        const apiKeyResponse = await fetch('http://127.0.0.1:5000/api/get-api-key');
+        const apiKeyData = await apiKeyResponse.json();
+        const apiKey = apiKeyData.api_key;
+
         const response = await fetch(`http://127.0.0.1:5000/api/average-occupancy?dayofweek=${day}`, {
             headers: {
-                'x-api-key': 'your_generated_api_key'
+                'x-api-key': apiKey
             }
         });
         const data = await response.json();
