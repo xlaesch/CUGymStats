@@ -1,0 +1,28 @@
+/* Dark mode styles */
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+header, footer {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+h1, h2, h3 {
+    color: #ffffff;
+}
+
+canvas {
+    background-color: #1e1e1e;
+}
+
+button {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #444444;
+}
+
+button:hover {
+    background-color: #444444;
+}
