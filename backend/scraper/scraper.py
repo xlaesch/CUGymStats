@@ -2,9 +2,10 @@ import requests
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 import os
-import sqlite3
+from dotenv import load_dotenv
 
 ua = UserAgent() #to bypass Mod_Security --> bot prevention
+load_dotenv()
 
 headers = {
     'User-Agent' : ua.random
@@ -58,4 +59,10 @@ def get_all_gym_names():
     pass #TODO: helper function to find out how many tables to create and put names in list
 
 if __name__ == "__main__":
-    pass
+    r=get_raw_html()
+    parse_html(r,debug=True)
+    
+    
+    
+    
+    
