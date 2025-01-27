@@ -31,16 +31,35 @@ def parse_html(r, debug=False):
 
     #Parse the HTML
     soup = BeautifulSoup(r.content, 'html.parser')
+    
+    print(soup)
 
     #Helen Newman Data Extraction
-    helen_newman_data = soup.select_one('.col-md-3.col-sm-6 .circleChart')
-    print(helen_newman_data)
+    circle_charts = soup.find_all('div', class_='circleChart')
+    
+    if circle_charts:
 
-    if helen_newman_data: # ! does not work for now
-        data_lastcount = helen_newman_data.get('data-lastcount')
-        data_percent = helen_newman_data.get('data-percent')
+        # Extract and print data attributes along with the facility name
+        for chart in circle_charts:
+            data_fcolor = chart.get('data-fcolor')
+            data_lastcount = chart.get('data-lastcount')
+            data_percent = chart.get('data-percent')
+            data_isclosed = chart.get('data-isclosed')
+
+            # The facility name is in the sibling or parent structure, find it
+            facility_name_div = chart.find_next('div', style="text-align:center;")
+            facility_name = facility_name_div.text.split('\n')[0].strip() if facility_name_div else "Unknown"
+
+            print(f"Facility Name: {facility_name}")
+            print(f"Color: {data_fcolor}")
+            print(f"Last Count: {data_lastcount}")
+            print(f"Percentage: {data_percent}")
+            print(f"Is Closed: {data_isclosed}")
+            print("-" * 20)
+
     else:
-        print('Element not found.')
+        return "No elements found!"
+
         
     data = {
         'location' : 'helen_newman',
@@ -51,16 +70,17 @@ def parse_html(r, debug=False):
     #! using testing data for the moment
         
     if debug:
-        print(data)
+        '''print(soup)
+        print(data)'''
     
-    return data
+    return data #TODO: use selenium to parse the HTML since the elements have been changed to be dynamically genetated using js
 
 def get_all_gym_names():
     pass #TODO: helper function to find out how many tables to create and put names in list
 
 if __name__ == "__main__":
-    r=get_raw_html()
-    parse_html(r,debug=True)
+    r=get_raw_html(debug=True)
+    print(parse_html(r,debug=True))
     
     
     
