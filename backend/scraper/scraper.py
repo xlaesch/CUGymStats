@@ -39,7 +39,7 @@ def get_raw_html(debug=False):
 
     return rendered_html
 
-def parse_html_with_selenium(url, debug=False):
+def parse_html_with_selenium(debug=False):
     rendered_html = get_raw_html(debug)
     
     # Parse the HTML with BeautifulSoup
@@ -51,7 +51,6 @@ def parse_html_with_selenium(url, debug=False):
     if circle_charts:
         for chart in circle_charts:
             data_fcolor = chart.get('data-fcolor')
-            data_lastcount_data = chart.get('data-lastcount')
             data_percent = chart.get('data-percent')
             data_isclosed = chart.get('data-isclosed')
 
@@ -83,4 +82,4 @@ def parse_html_with_selenium(url, debug=False):
 
 # Example usage
 if __name__ == "__main__":
-    parse_html_with_selenium("http://your-website-url.com", debug=True)
+    parse_html_with_selenium(debug=True)
