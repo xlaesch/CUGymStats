@@ -47,6 +47,8 @@ def parse_html_with_selenium(debug=False):
 
     # Find all circleChart divs
     circle_charts = soup.find_all('div', class_='circleChart')
+    
+    data_dic = {}
 
     if circle_charts:
         for chart in circle_charts:
@@ -77,9 +79,16 @@ def parse_html_with_selenium(debug=False):
             print(f"Percentage: {data_percent}")
             print(f"Is Closed: {data_isclosed}")
             print("-" * 20)
+            
+            data_dic[facility_name]=[last_count,data_percent,data_isclosed]
+        
+        return data_dic
+            
     else:
         print("No elements found!")
+        
 
 # Example usage
 if __name__ == "__main__":
-    parse_html_with_selenium(debug=True)
+    output=parse_html_with_selenium(debug=False)
+    print(output)
