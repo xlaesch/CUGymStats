@@ -72,13 +72,14 @@ def parse_html_with_selenium(debug=False):
             else:
                 facility_name = "Unknown"
                 last_count = "Unknown"
-
-            print(f"Facility Name: {facility_name}")
-            print(f"Color: {data_fcolor}")
-            print(f"Last Count: {last_count}")
-            print(f"Percentage: {data_percent}")
-            print(f"Is Closed: {data_isclosed}")
-            print("-" * 20)
+            
+            if debug:
+                print(f"Facility Name: {facility_name}")
+                print(f"Color: {data_fcolor}")
+                print(f"Last Count: {last_count}")
+                print(f"Percentage: {data_percent}")
+                print(f"Is Closed: {data_isclosed}")
+                print("-" * 20)
             
             data_dic[facility_name]=[last_count,data_percent,data_isclosed]
         
