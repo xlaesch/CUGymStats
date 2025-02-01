@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 def get_db_connection():
     return sqlite3.connect("backend/database/data.db")
@@ -18,8 +19,6 @@ def init_table(table_name: str):
                     hour INTEGER)''')
     
     con.close()
-
-#TODO: make a helper function to connect to the database, so we'll only have to change the path on one function
 
 month_code_map = {
     '01' : 0,
@@ -53,30 +52,35 @@ def get_day_of_week(year_code, month_code, century_code, date_number, leapyear_c
     return (year_code + month_code + century_code + date_number - leapyear_code) % 7
 
 
-def insert_new_data(data):
-    
-    #Find day of week
-    year = data['data_timestamp'][0:4]
-    year_code = get_year_code(year)
-    month_code = month_code_map[data['data_timestamp'][5:7]]
-    date_number = data['data_timestamp'][8:10]
-    leapyear_code = get_leapyear_code(data['data_timestamp'][0:4])
-    dayofweek = get_day_of_week(year_code,month_code,century_code,date_number,leapyear_code)
-    hour = data['data_timestamp'][11:14] #this would be a round down
-    
-    #Connect to database
-    print('Attempting connection to database...')
-    con = get_db_connection()
-    print('Successful connection!')
-    cur = con.cursor()
-    
-    #Inserting new data
-    print('Attempting to insert new data...')
-    cur.execute(f'''INSERT INTO {data['location']}(lastcount,percent,timestamp,daysofweek)
-                VALUES (?,?,?)''', (data['data_lastcount'], data['data_percent'], data['data_timestamp'], dayofweek, hour))
-    con.commit()
-    con.close()
-    print('Successful insertion!')
+def insert_new_data(scraped_data):
+    """
+    Accepts scraped_data as a dict where each key is a facility name and the corresponding value
+    is a list: [last_count, percent, is_closed]. Inserts a new row into the 
+    table corresponding to each facility.
+    """
+    now = datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+    # Use weekday() where Monday=0, Sunday=6
+    dayofweek = now.weekday()
+    hour = now.strftime("%H")
+
+    for facility, values in scraped_data.items():
+        last_count, percent, is_closed = values
+        
+        print(f'Attempting connection to database for facility: {facility}...')
+        con = get_db_connection()
+        print('Successful connection!')
+        cur = con.cursor()
+        
+        print('Attempting to insert new data...')
+        cur.execute(
+            f'''INSERT INTO "{facility}" (lastcount, percent, timestamp, dayofweek, hour)
+                VALUES (?,?,?,?,?)''', 
+            (last_count, percent, timestamp, dayofweek, hour)
+        )
+        con.commit()
+        con.close()
+        print(f'Successful insertion for facility: {facility}!')
 
 def get_average_for_day(dayofweek):
     # Connect to database
