@@ -4,11 +4,12 @@ def get_db_connection():
     return sqlite3.connect("backend/database/data.db")
 
 def init_table(table_name: str):
+    print(table_name)
     con = get_db_connection()
     cur = con.cursor() #cursor creation
 
     # Create table if it does not exist
-    cur.execute(f'''CREATE TABLE IF NOT EXISTS {table_name}
+    cur.execute(f'''CREATE TABLE IF NOT EXISTS "{table_name}"
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
                     lastcount INTEGER,
                     percent INTEGER,
