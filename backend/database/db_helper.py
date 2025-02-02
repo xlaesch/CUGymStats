@@ -125,6 +125,20 @@ def get_average_for_day_hour(dayofweek: int, hour: str)-> int:
         print('Was able to find!')
     
     return avg
+
+def clean_data(schedule, table):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # Get the hours for the given table
+    open_hour, close_hour = schedule[table]
+
+    # Delete rows that are outside the operating hours
+    cur.execute(f'''DELETE FROM "{table}"
+                    WHERE hour < ? OR hour >= ?''', (open_hour, close_hour))
+
+    con.commit()
+    con.close()
     
 if __name__ == '__main__':
     pass
