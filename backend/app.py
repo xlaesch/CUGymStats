@@ -22,3 +22,4 @@ scraped_data = parse_html_with_selenium()
 
 insert_new_data(scraped_data)
 
+
