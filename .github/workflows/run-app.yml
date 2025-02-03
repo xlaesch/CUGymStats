@@ -22,5 +22,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r backend/requirements.txt
 
+    - name: Set environment variables
+      run: |
+        echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+        echo "URL=${{ secrets.URL }}" >> $GITHUB_ENV
+
     - name: Run app.py
       run: python backend/app.py

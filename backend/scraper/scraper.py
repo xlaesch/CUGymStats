@@ -12,15 +12,16 @@ headers = {
     'User-Agent' : ua.random
 }
 
-# Load environment variables from .env file
+# Load environment variables from .env file if it exists
 load_dotenv()
 
+url = os.getenv('URL')
+api_key = os.getenv('API_KEY')
+
+if not url or not api_key:
+    raise Exception("Please specify the URL and API_KEY in environment variables.")
+
 def get_raw_html(debug=False):
-    url = os.environ.get('url')
-
-    if not url:
-        raise Exception("Please specify the url in environment variables. Variable name 'url'.")
-
     # Initialize Selenium WebDriver (use the appropriate path to your WebDriver)
     driver = webdriver.Chrome()  # Or webdriver.Firefox(), etc.
     driver.get(url)
