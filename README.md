@@ -4,6 +4,7 @@
 [![language](https://img.shields.io/badge/language-python3%2E13%2E1-blue)](https://www.python.org/)
 ![release](https://img.shields.io/badge/release-pre--dev-orange)
 [![GitHub last commit](https://img.shields.io/github/last-commit/xlaesch/CUGymStats)](#)
+[![Run app.py every hour](https://github.com/xlaesch/CUGymStats/actions/workflows/run-app.yml/badge.svg)](https://github.com/xlaesch/CUGymStats/actions/workflows/run-app.yml)
 
 ## Overview
 
