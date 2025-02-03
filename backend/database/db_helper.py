@@ -5,9 +5,8 @@ def get_db_connection():
     return sqlite3.connect("backend/database/data.db")
 
 def init_table(table_name: str):
-    print(table_name)
     con = get_db_connection()
-    cur = con.cursor() #cursor creation
+    cur = con.cursor()
 
     # Create table if it does not exist
     cur.execute(f'''CREATE TABLE IF NOT EXISTS "{table_name}"
@@ -19,6 +18,17 @@ def init_table(table_name: str):
                     hour INTEGER)''')
     
     con.close()
+
+def tables_exist(table_names):
+    con = get_db_connection()
+    cur = con.cursor()
+    for table_name in table_names:
+        cur.execute(f'''SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}' ''')
+        if cur.fetchone() is None:
+            con.close()
+            return False
+    con.close()
+    return True
 
 month_code_map = {
     '01' : 0,
@@ -95,7 +105,7 @@ def get_average_for_day(dayofweek):
                 FROM helen_newman 
                 WHERE dayofweek = ?
                 GROUP BY hour
-                ORDER BY hour;''', (dayofweek)) #TODO: figure out why it's saying no such table for helen_newman??
+                ORDER BY hour;''', (dayofweek))
     
     data = cur.fetchall()
     con.close()
