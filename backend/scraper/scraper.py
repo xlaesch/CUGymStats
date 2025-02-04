@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import os
 from dotenv import load_dotenv
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 ua = UserAgent() #to bypass Mod_Security --> bot prevention
@@ -22,8 +24,12 @@ if not url or not api_key:
     raise Exception("Please specify the URL and API_KEY in environment variables.")
 
 def get_raw_html(debug=False):
-    # Initialize Selenium WebDriver (use the appropriate path to your WebDriver)
-    driver = webdriver.Chrome()  # Or webdriver.Firefox(), etc.
+    # Initialize Selenium WebDriver with headless mode
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get(url)
 
     # Allow the page to fully load and JavaScript to render the content
