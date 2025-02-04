@@ -2,7 +2,7 @@ name: Run app.py every hour
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 05-23 * * *'
 
 jobs:
   run-app:
