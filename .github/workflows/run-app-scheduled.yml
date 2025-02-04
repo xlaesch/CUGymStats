@@ -1,8 +1,8 @@
-name: Run app.py manually
+name: Run app.py every hour
 
 on:
-    workflow_dispatch:
-
+  schedule:
+    - cron: '0 * * * *'
 
 jobs:
   run-app:
