@@ -24,7 +24,7 @@ jobs:
 
     - name: Set environment variables
       run: |
-        echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENVx
+        echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
         echo "URL=${{ secrets.URL }}" >> $GITHUB_ENV
 
     - name: Run app.py
