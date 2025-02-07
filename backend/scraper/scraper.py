@@ -17,7 +17,7 @@ headers = {
 # Load environment variables from .env file if it exists
 load_dotenv()
 
-url = os.getenv('URL')
+url = os.getenv('url')
 api_key = os.getenv('API_KEY')
 
 if not url or not api_key:

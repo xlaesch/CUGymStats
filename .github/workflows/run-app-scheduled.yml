@@ -22,6 +22,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r backend/requirements.txt
 
+    - name: Download database
+      uses: actions/download-artifact@v2
+      with:
+        name: database
+        path: backend/database
+
     - name: Set environment variables
       run: |
         echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
@@ -29,3 +35,9 @@ jobs:
 
     - name: Run app.py
       run: python backend/app.py
+
+    - name: Upload database
+      uses: actions/upload-artifact@v2
+      with:
+        name: database
+        path: backend/database/data.db
