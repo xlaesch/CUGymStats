@@ -1,8 +1,8 @@
 name: Run app.py every hour
 
-on:
-  schedule:
-    - cron: '0 05-23 * * *'
+# on:
+#   schedule:
+#     - cro05-23: '0 05-23 * * *'
 
 jobs:
   run-app:
