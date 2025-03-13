@@ -30,8 +30,8 @@ def get_raw_html(debug=False):
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     
-    # Set the path to the Chrome binary
-    options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    # Remove or comment out this:
+    # options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get(url)
