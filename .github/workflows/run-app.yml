@@ -52,7 +52,7 @@ jobs:
       - name: Check new data insertion
         run: |
           # Adjust the DB and table name as needed
-          sqlite3 backend/database/data.db "SELECT COUNT(*) FROM your_table_name;"
+          sqlite3 backend/database/data.db "SELECT COUNT(*) FROM [Helen Newman Fitness Center];"
           # Optionally add logic to exit if no rows were inserted
 
       - name: Run app.py
