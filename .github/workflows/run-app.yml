@@ -49,5 +49,11 @@ jobs:
           echo "url=${{ secrets.URL }}" >> $GITHUB_ENV
           echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
 
+      - name: Check new data insertion
+        run: |
+          # Adjust the DB and table name as needed
+          sqlite3 backend/cugymstats.db "SELECT COUNT(*) FROM your_table_name;"
+          # Optionally add logic to exit if no rows were inserted
+
       - name: Run app.py
         run: python backend/app.py
