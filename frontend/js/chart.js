@@ -19,10 +19,8 @@ const myChart = new Chart(ctx, {
     }
 });
 
-async function fetchData() {
+async function fetchData(day) {
     try {
-        const d = new Date();
-        let day = d.getDay();
         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         document.getElementById('dayOfWeek').innerText = `Data for: ${daysOfWeek[day]}`;
 
@@ -48,4 +46,14 @@ async function fetchData() {
     }
 }
 
-fetchData();
+// Set up dropdown and initial fetch
+window.addEventListener('DOMContentLoaded', () => {
+    const daySelector = document.getElementById('daySelector');
+    const today = new Date().getDay();
+    daySelector.value = today;
+    fetchData(today);
+
+    daySelector.addEventListener('change', (e) => {
+        fetchData(Number(e.target.value));
+    });
+});

@@ -48,9 +48,7 @@ def average_occupancy():
 
 @app.route('/api/get-api-key', methods=['GET'])
 def get_api_key():
-    response = jsonify({'api_key': API_KEY})
-    response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:3000')
-    return response
+    return jsonify({'api_key': API_KEY})
 
 if __name__ == '__main__':
     app.run(debug=True)
