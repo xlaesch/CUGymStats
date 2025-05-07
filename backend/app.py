@@ -1,4 +1,3 @@
-import sys
 from database.db_helper import init_table, insert_new_data, tables_exist
 from scraper.scraper import *
 
