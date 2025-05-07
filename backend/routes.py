@@ -5,21 +5,38 @@ from database.db_helper import get_average_for_day, get_db_connection
 from dotenv import load_dotenv
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:3000"}})
+# Update CORS to be more specific - allow only your frontend origin
+CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:3000", "https://yourdomain.com"]}})
 
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
-print(f'printing API_KEY: {API_KEY}')
 
+# Option 1: Use referrer checking
 def authenticate_request():
-    api_key = request.headers.get('x-api-key')
-    if api_key != API_KEY:
+    # Check if the request is coming from your website
+    referrer = request.headers.get('Referer', '')
+    allowed_domains = ['127.0.0.1', 'localhost', 'yourdomain.com']
+    
+    is_valid_referrer = any(domain in referrer for domain in allowed_domains)
+    
+    if not is_valid_referrer:
         abort(401, description='Unauthorized')
 
+# Option 2: Add rate limiting
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"]
+)
+
 @app.route("/api/gymstats", methods=['GET'])
+@limiter.limit("30 per minute")  # Add rate limiting
 def get_gym_stats():
-    authenticate_request()
+    authenticate_request()  # Use referrer checking
     con = get_db_connection()
     cur = con.cursor()
     
@@ -36,8 +53,9 @@ def get_gym_stats():
     return jsonify(response)
 
 @app.route('/api/average-occupancy', methods=['GET'])
+@limiter.limit("30 per minute")  # Add rate limiting
 def average_occupancy():
-    authenticate_request()
+    authenticate_request()  # Use referrer checking
     day_of_week = request.args.get('dayofweek')
     
     data = get_average_for_day(day_of_week)
@@ -46,9 +64,6 @@ def average_occupancy():
     
     return jsonify(result)
 
-@app.route('/api/get-api-key', methods=['GET'])
-def get_api_key():
-    return jsonify({'api_key': API_KEY})
 
 if __name__ == '__main__':
     app.run(debug=True)

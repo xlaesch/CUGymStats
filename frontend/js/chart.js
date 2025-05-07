@@ -24,15 +24,15 @@ async function fetchData(day) {
         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         document.getElementById('dayOfWeek').innerText = `Data for: ${daysOfWeek[day]}`;
 
-        const apiKeyResponse = await fetch('http://127.0.0.1:5000/api/get-api-key');
-        const apiKeyData = await apiKeyResponse.json();
-        const apiKey = apiKeyData.api_key;
-
-        const response = await fetch(`http://127.0.0.1:5000/api/average-occupancy?dayofweek=${day}`, {
-            headers: {
-                'x-api-key': apiKey
-            }
-        });
+        // Remove API key request - send request directly
+        const response = await fetch(`http://127.0.0.1:5000/api/average-occupancy?dayofweek=${day}`);
+        
+        // Handle unauthorized error
+        if (response.status === 401) {
+            console.error('Unauthorized access');
+            return;
+        }
+        
         const data = await response.json();
 
         const labels = data.map(item => item.hour);
