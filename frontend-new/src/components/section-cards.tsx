@@ -4,156 +4,121 @@ import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardAction,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 
-export function SectionCards() {
+interface SectionCardsProps {
+  setSelectedGym: (gym: string) => void
+}
+
+export function SectionCards({ setSelectedGym }: SectionCardsProps) {
+  const gymLocations = [
+    {
+      name: "Helen Newman Fitness Center",
+      value: "helen-newman-fitness-center",
+      capacity: "29%",
+      trend: "up",
+      lastCount: 23,
+      status: "Busier than usual",
+      gradient: "from-blue-50 to-blue-100",
+    },
+    {
+      name: "HNH Court 1 Basketball",
+      value: "hnh-court-1-basketball",
+      capacity: "42%",
+      trend: "down",
+      lastCount: 18,
+      status: "Less busy than usual",
+      gradient: "from-blue-50 to-blue-100",
+    },
+    {
+      name: "HNH Court 2 Volleyball/Badminton",
+      value: "hnh-court-2-volleyball-badminton",
+      capacity: "58%",
+      trend: "down",
+      lastCount: 24,
+      status: "Less busy than usual",
+      gradient: "from-orange-50 to-orange-100",
+    },
+    {
+      name: "Noyes Court Basketball",
+      value: "noyes-court-basketball",
+      capacity: "12%",
+      trend: "down",
+      lastCount: 5,
+      status: "Not busy",
+      gradient: "from-blue-50 to-blue-100",
+    },
+    {
+      name: "Noyes Fitness Center",
+      value: "noyes-fitness-center",
+      capacity: "65%",
+      trend: "down",
+      lastCount: 78,
+      status: "Less busy than usual",
+      gradient: "from-orange-50 to-orange-100",
+    },
+    {
+      name: "Teagle Down Fitness Center",
+      value: "teagle-down-fitness-center",
+      capacity: "48%",
+      trend: "down",
+      lastCount: 52,
+      status: "Less busy than usual",
+      gradient: "from-blue-50 to-blue-100",
+    },
+    {
+      name: "Teagle Up Fitness Center",
+      value: "teagle-up-fitness-center",
+      capacity: "83%",
+      trend: "up",
+      lastCount: 96,
+      status: "Busier than usual",
+      gradient: "from-orange-50 to-orange-100",
+    },
+    {
+      name: "Toni Morrison Fitness Center",
+      value: "toni-morrison-fitness-center",
+      capacity: "92%",
+      trend: "up",
+      lastCount: 110,
+      status: "As busy as it gets",
+      gradient: "from-red-100 to-red-200",
+      borderColor: "border-red-200",
+    },
+  ]
+
   return (
     <div className="grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-  <Card className="@container/card bg-gradient-to-t from-blue-50 to-blue-100">
-        <CardHeader>
-          <CardDescription>Helen Newman Fitness Center</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            29%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Last Count: 23
-          </div>
-          <div className="text-muted-foreground">
-            Busier than usual
-          </div>
-        </CardFooter>
-      </Card>
-  <Card className="@container/card bg-gradient-to-t from-blue-50 to-blue-100">
-        <CardHeader>
-          <CardDescription>HNH Court 1 Basketball</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            42%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-      <IconTrendingDown />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">Last Count: 18</div>
-          <div className="text-muted-foreground">Less busy than usual</div>
-        </CardFooter>
-      </Card>
-  <Card className="@container/card bg-gradient-to-t from-orange-50 to-orange-100">
-        <CardHeader>
-          <CardDescription>HNH Court 2 Volleyball/Badminton</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            58%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-      <IconTrendingDown />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">Last Count: 24</div>
-          <div className="text-muted-foreground">Less busy than usual</div>
-        </CardFooter>
-      </Card>
-  <Card className="@container/card bg-gradient-to-t from-blue-50 to-blue-100">
-        <CardHeader>
-          <CardDescription>Noyes Court Basketball</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            12%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-      <IconTrendingDown />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">Last Count: 5</div>
-          <div className="text-muted-foreground">Not busy</div>
-        </CardFooter>
-      </Card>
-      {/* Second row */}
-  <Card className="@container/card bg-gradient-to-t from-orange-50 to-orange-100">
-        <CardHeader>
-          <CardDescription>Noyes Fitness Center</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            65%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-      <IconTrendingDown />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">Last Count: 78</div>
-          <div className="text-muted-foreground">Less busy than usual</div>
-        </CardFooter>
-      </Card>
-  <Card className="@container/card bg-gradient-to-t from-blue-50 to-blue-100">
-        <CardHeader>
-          <CardDescription>Teagle Down Fitness Center</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            48%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-      <IconTrendingDown />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">Last Count: 52</div>
-          <div className="text-muted-foreground">Less busy than usual</div>
-        </CardFooter>
-      </Card>
-  <Card className="@container/card bg-gradient-to-t from-orange-50 to-orange-100">
-        <CardHeader>
-          <CardDescription>Teagle Up Fitness Center</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            83%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">Last Count: 96</div>
-          <div className="text-muted-foreground">Busier than usual</div>
-        </CardFooter>
-      </Card>
-  <Card className="@container/card bg-gradient-to-t from-red-100 to-red-200 border-red-200">
-        <CardHeader>
-          <CardDescription>Toni Morrison Fitness Center</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            92%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">Last Count: 110</div>
-          <div className="text-muted-foreground">As busy as it gets</div>
-        </CardFooter>
-      </Card>
+      {gymLocations.map((gym) => (
+        <Card
+          key={gym.value}
+          className={`@container/card cursor-pointer bg-gradient-to-t ${gym.gradient} ${gym.borderColor || ""}`}
+          onClick={() => setSelectedGym(gym.value)}
+        >
+          <CardHeader>
+            <CardDescription>{gym.name}</CardDescription>
+            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+              {gym.capacity}
+            </CardTitle>
+            <CardAction>
+              <Badge variant="outline">
+                {gym.trend === "up" ? <IconTrendingUp /> : <IconTrendingDown />}
+              </Badge>
+            </CardAction>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1.5 text-sm">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              Last Count: {gym.lastCount}
+            </div>
+            <div className="text-muted-foreground">{gym.status}</div>
+          </CardFooter>
+        </Card>
+      ))}
     </div>
   )
 }
