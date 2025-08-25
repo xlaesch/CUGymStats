@@ -3,17 +3,22 @@ from datetime import datetime
 
 import psycopg
 from psycopg import sql
+from dotenv import load_dotenv
 
 
 def get_db_connection():
     """
     Connect to Neon/Postgres using a DATABASE_URL (or NEON_DATABASE_URL) environment variable.
     If sslmode is not present, it will be enforced (Neon requires TLS).
+    Also attempts to load variables from a local .env file.
     """
-    dsn = os.getenv("DATABASE_URL")
+    # Load variables from .env if present
+    load_dotenv()
+
+    dsn = os.getenv("DATABASE_URL") or os.getenv("NEON_DATABASE_URL")
     if not dsn:
         raise RuntimeError(
-            "DATABASE_URL not set. Provide your Neon connection string."
+            "DATABASE_URL (or NEON_DATABASE_URL) not set. Provide your Neon connection string."
         )
 
     # Ensure we connect over TLS by default
@@ -32,14 +37,17 @@ def init_table(table_name: str):
             cur.execute(
                 sql.SQL(
                     '''CREATE TABLE IF NOT EXISTS {} (
-                        id BIGSERIAL PRIMARY KEY,
-                        lastcount INTEGER,
-                        percent INTEGER,
-                        "timestamp" TIMESTAMPTZ,
-                        dayofweek INTEGER,
+                        id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name {}),
+                        lastcount SMALLINT,
+                        percent SMALLINT,
+                        "timestamp" TIMESTAMP,
+                        dayofweek SMALLINT,
                         hour SMALLINT
                     )'''
-                ).format(sql.Identifier(table_name))
+                ).format(
+                    sql.Identifier(table_name),
+                    sql.Identifier(f"{table_name}_id_seq"),
+                )
             )
             con.commit()
 
@@ -108,16 +116,16 @@ def get_average_for_day(dayofweek):
         with con.cursor() as cur:
             # Find values for day of week
             print("Attempting to find data...")
-            cur.execute(
+            query = sql.SQL(
                 """
                 SELECT hour, AVG(percent) AS avg_percentage
-                FROM helen_newman 
+                FROM {} 
                 WHERE dayofweek = %s
                 GROUP BY hour
                 ORDER BY hour;
-                """,
-                (dayofweek,),
-            )
+                """
+            ).format(sql.Identifier("Helen Newman Fitness Center"))
+            cur.execute(query, (dayofweek,))
 
             data = cur.fetchall()
 
@@ -135,12 +143,15 @@ def get_average_for_day_hour(dayofweek: int, hour: str) -> int | None:
         with con.cursor() as cur:
             # Find values for day of week
             print("Attempting to find data...")
-            cur.execute(
+            query = sql.SQL(
                 """
                 SELECT AVG(percent)
-                FROM helen_newman
+                FROM {}
                 WHERE dayofweek = %s AND hour = %s;
-                """,
+                """
+            ).format(sql.Identifier("Helen Newman Fitness Center"))
+            cur.execute(
+                query,
                 (
                     dayofweek,
                     int(hour) if isinstance(hour, str) and hour.isdigit() else hour,

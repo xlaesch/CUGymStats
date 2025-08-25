@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 import os
-from database.db_helper import get_average_for_day, get_db_connection
+from db_helper_pg import get_average_for_day, get_db_connection
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -40,14 +40,13 @@ def get_gym_stats():
     con = get_db_connection()
     cur = con.cursor()
     
-    cur.execute('''SELECT *
-                FROM helen_newman
-                ''')
+    cur.execute('''SELECT id, lastcount, percent, "timestamp"
+                FROM "Helen Newman Fitness Center"''')
     
     output = cur.fetchall()
     cur.close()
     
-    response = [{'lastcount': row[0], 'percentage': row[1], 'timestamp': row[2]}
+    response = [{'id': row[0], 'lastcount': row[1], 'percentage': row[2], 'timestamp': row[3]}
                 for row in output]
         
     return jsonify(response)
@@ -56,7 +55,7 @@ def get_gym_stats():
 @limiter.limit("30 per minute")  # Add rate limiting
 def average_occupancy():
     authenticate_request()  # Use referrer checking
-    day_of_week = request.args.get('dayofweek')
+    day_of_week = int(request.args.get('dayofweek'))
     
     data = get_average_for_day(day_of_week)
     

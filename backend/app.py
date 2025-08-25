@@ -1,4 +1,4 @@
-from database.db_helper import init_table, insert_new_data, tables_exist
+from db_helper_pg import init_table, insert_new_data, tables_exist
 from scraper.scraper import *
 
 hours = {
