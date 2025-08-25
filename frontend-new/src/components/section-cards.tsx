@@ -103,7 +103,7 @@ export function SectionCards({ setSelectedGym }: SectionCardsProps) {
           <CardHeader>
             <CardDescription>{gym.name}</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              {gym.capacity}
+              {gym.capacity} Full
             </CardTitle>
             <CardAction>
               <Badge variant="outline">
