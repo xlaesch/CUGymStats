@@ -31,15 +31,15 @@ import {
 
 export const description = "An interactive area chart"
 
-const chartData = Array.from({ length: 17 }, (_, i) => {
-  const hour = i + 7
-  const ampm = hour >= 12 ? "pm" : "am"
-  const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour
-  return {
-    time: `${displayHour}${ampm}`,
-    visitors: Math.floor(Math.random() * 200) + 50,
-  }
-})
+type AvgPoint = { hour: number; avg_percentage: number | null }
+type ChartPoint = { time: string; visitors: number }
+
+function toTimeLabel(hour: number): string {
+  const h = ((hour % 24) + 24) % 24
+  const ampm = h >= 12 ? "pm" : "am"
+  const display = h % 12 === 0 ? 12 : h % 12
+  return `${display}${ampm}`
+}
 
 const chartConfig = {
   visitors: {
@@ -59,6 +59,38 @@ export function ChartAreaInteractive({
 }: ChartAreaInteractiveProps) {
   const [timeRange, setTimeRange] = React.useState("90d")
   const [selectedDay, setSelectedDay] = React.useState("monday")
+  const [data, setData] = React.useState<ChartPoint[]>([])
+  const [loading, setLoading] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
+
+  const dayMap: Record<string, number> = {
+    monday: 0,
+    tuesday: 1,
+    wednesday: 2,
+    thursday: 3,
+    friday: 4,
+    saturday: 5,
+    sunday: 6,
+  }
+
+  React.useEffect(() => {
+    const dayIdx = dayMap[selectedDay] ?? 0
+    setLoading(true)
+    setError(null)
+    // Calls the Next.js BFF route
+    fetch(`/api/average-occupancy?dayofweek=${dayIdx}`)
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`Request failed ${r.status}`)
+        const json = (await r.json()) as AvgPoint[]
+        const points: ChartPoint[] = json.map((p) => ({
+          time: toTimeLabel(p.hour),
+          visitors: Math.max(0, Math.round((p.avg_percentage ?? 0))),
+        }))
+        setData(points)
+      })
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [selectedDay])
 
   const gymOptions = [
     {
@@ -174,11 +206,14 @@ export function ChartAreaInteractive({
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+        {error && (
+          <div className="text-sm text-destructive mb-2">{error}</div>
+        )}
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={chartData} margin={{ left: 12, right: 20 }}>
+          <AreaChart data={data} margin={{ left: 12, right: 20 }}>
             <defs>
               <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
                 <stop

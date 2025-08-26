@@ -10,6 +10,21 @@
 
 CUGymStats is a web application that provides real-time statistics and historical data on gym occupancy at Cornell. The application consists of a backend that scrapes data from the gym's website and a frontend that displays the data in a user-friendly format.
 
+### Architecture: BFF vs Domain API
+
+- BFF (Next.js):
+    - Web concerns only: request shaping, aggregation, caching, rate limiting, feature flags, input sanity checks.
+    - Calls the Domain API with an HMAC-signed request; no direct DB access and no secrets sent to the browser.
+- Domain API (Flask):
+    - Owns business logic and data access to Postgres.
+    - Verifies HMAC from BFF, applies domain validations and a light “safety” rate-limit.
+
+Local setup:
+- Configure shared secret in both apps.
+    - Backend: copy `backend/.env.example` to `backend/.env` and set `DOMAIN_API_SECRET` and `DATABASE_URL`.
+    - Frontend: copy `frontend-new/.env.example` to `frontend-new/.env` and set `DOMAIN_API_BASE` and `DOMAIN_API_SECRET`.
+- Start Flask on 127.0.0.1:5000 and Next.js on 127.0.0.1:3000. The frontend BFF routes call Flask.
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -31,7 +46,7 @@ CUGymStats is a web application that provides real-time statistics and historica
 
 ## Installation
 
-### Backend
+### Backend (Flask Domain API)
 
 1. Navigate to the `backend` directory:
     ```sh
@@ -56,17 +71,23 @@ CUGymStats is a web application that provides real-time statistics and historica
 
 5. Run the backend server:
     ```sh
-    flask run
+    export FLASK_APP=routes.py
+    flask run --host 127.0.0.1 --port 5000
     ```
 
-### Frontend
+### Frontend (Next.js BFF + UI)
 
-1. Navigate to the `frontend` directory:
+1. Navigate to the `frontend-new` directory:
     ```sh
-    cd frontend
+    cd frontend-new
     ```
 
-2. Open `index.html` in your web browser.
+2. Install dependencies and run dev server:
+    ```sh
+    npm install
+    npm run dev
+    ```
+3. Visit http://127.0.0.1:3000/dashboard
 
 ## Usage
 
@@ -76,8 +97,12 @@ CUGymStats is a web application that provides real-time statistics and historica
 
 ## API Endpoints
 
-- `GET /api/gymstats`: Retrieve all gym statistics.
-- `GET /api/average-occupancy?dayofweek=<day>`: Retrieve average occupancy for a specific day of the week.
+- BFF (Next.js):
+    - `GET /api/gymstats`
+    - `GET /api/average-occupancy?dayofweek=0..6`
+- Domain API (Flask):
+    - `GET /api/gymstats` (HMAC protected)
+    - `GET /api/average-occupancy?dayofweek=0..6` (HMAC protected)
 
 ## Contributing
 
