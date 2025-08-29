@@ -4,6 +4,7 @@ import os
 import time
 import hmac
 import hashlib
+from psycopg import sql
 from db_helper_pg import get_average_for_day, get_db_connection
 from dotenv import load_dotenv
 
@@ -15,7 +16,7 @@ CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:3000", "http://localh
 load_dotenv()
 
 # Shared secret used for HMAC verification of BFF calls
-DOMAIN_API_SECRET = os.getenv("DOMAIN_API_SECRET") or os.getenv("API_SHARED_SECRET")
+DOMAIN_API_SECRET = os.getenv("DOMAIN_API_SECRET")
 if not DOMAIN_API_SECRET:
     # Keep running, but warn loudly. Prefer failing fast in production.
     print("[WARN] DOMAIN_API_SECRET not set. HMAC verification will fail.")
@@ -93,11 +94,16 @@ def _verify_hmac_or_abort():
 @app.route("/api/gymstats", methods=['GET'])
 def get_gym_stats():
     _verify_hmac_or_abort()
+    location = request.headers.get('X-Location')
+    if not location:
+        abort(400, description="Missing 'X-Location' header.")
+        
     con = get_db_connection()
     cur = con.cursor()
     
-    cur.execute('''SELECT id, lastcount, percent, "timestamp"
-                FROM "Helen Newman Fitness Center"''')
+    query = sql.SQL('''SELECT id, lastcount, percent, "timestamp"
+                FROM {}''').format(sql.Identifier(location))
+    cur.execute(query)
     
     output = cur.fetchall()
     cur.close()
@@ -110,16 +116,23 @@ def get_gym_stats():
 @app.route('/api/average-occupancy', methods=['GET'])
 def average_occupancy():
     _verify_hmac_or_abort()
-    day_param = request.args.get('dayofweek', None)
+    location = request.headers.get('X-Location')
+    if not location:
+        abort(400, description="Missing 'X-Location' header.")
+
+    day_param = request.headers.get('X-Day-Of-Week')
+    if day_param is None:
+        abort(400, description='Missing X-Day-Of-Week header.')
+
     try:
         day_of_week = int(day_param)
     except (TypeError, ValueError):
-        abort(400, description='Invalid dayofweek. Expected integer 0-6.')
+        abort(400, description='Invalid X-Day-Of-Week header. Expected integer 0-6.')
 
     if day_of_week < 0 or day_of_week > 6:
-        abort(400, description='Invalid dayofweek. Expected integer 0-6.')
+        abort(400, description='Invalid X-Day-Of-Week header. Expected integer 0-6.')
 
-    data = get_average_for_day(day_of_week)
+    data = get_average_for_day(day_of_week, location)
     result = [{'hour': int(row[0]), 'avg_percentage': float(row[1]) if row[1] is not None else None} for row in data]
     return jsonify(result)
 

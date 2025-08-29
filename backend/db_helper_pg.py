@@ -108,7 +108,7 @@ def insert_new_data(scraped_data):
                 print(f"Successful insertion for facility: {facility}!")
 
 
-def get_average_for_day(dayofweek):
+def get_average_for_day(dayofweek, table_name):
     # Connect to database
     print("Attempting connection to database...")
     with get_db_connection() as con:
@@ -124,7 +124,7 @@ def get_average_for_day(dayofweek):
                 GROUP BY hour
                 ORDER BY hour;
                 """
-            ).format(sql.Identifier("Helen Newman Fitness Center"))
+            ).format(sql.Identifier(table_name))
             cur.execute(query, (dayofweek,))
 
             data = cur.fetchall()

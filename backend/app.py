@@ -1,5 +1,5 @@
 from db_helper_pg import init_table, insert_new_data, tables_exist
-from scraper.scraper import *
+from backend.scraper import *
 
 hours = {
     'Helen Newman Fitness Center': (6, 21),
