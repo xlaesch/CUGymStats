@@ -73,25 +73,7 @@ export function ChartAreaInteractive({
     sunday: 6,
   }
 
-  React.useEffect(() => {
-    const dayIdx = dayMap[selectedDay] ?? 0
-    setLoading(true)
-    setError(null)
-    // Calls the Next.js BFF route
-    fetch(`/api/average-occupancy?dayofweek=${dayIdx}`)
-      .then(async (r) => {
-        if (!r.ok) throw new Error(`Request failed ${r.status}`)
-        const json = (await r.json()) as AvgPoint[]
-        const points: ChartPoint[] = json.map((p) => ({
-          time: toTimeLabel(p.hour),
-          visitors: Math.max(0, Math.round((p.avg_percentage ?? 0))),
-        }))
-        setData(points)
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false))
-  }, [selectedDay])
-
+  // Define gym options before any memo/effect that depends on them
   const gymOptions = [
     {
       value: "helen-newman-fitness-center",
@@ -114,6 +96,36 @@ export function ChartAreaInteractive({
       label: "Toni Morrison Fitness Center",
     },
   ]
+
+  const defaultLocation = "Helen Newman Fitness Center"
+  const slugToLabel = React.useMemo(() => {
+    const m = new Map<string, string>()
+    for (const g of gymOptions) m.set(g.value, g.label)
+    return m
+  }, [])
+
+  React.useEffect(() => {
+    const dayIdx = dayMap[selectedDay] ?? 0
+    setLoading(true)
+    setError(null)
+    // Resolve table name from current selection; fall back to a safe default
+    const location = slugToLabel.get(selectedGym) || defaultLocation
+    // Calls the Next.js BFF route
+    fetch(`/api/average-occupancy?dayofweek=${dayIdx}&location=${encodeURIComponent(location)}`)
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`Request failed ${r.status}`)
+        const json = (await r.json()) as AvgPoint[]
+        const points: ChartPoint[] = json.map((p) => ({
+          time: toTimeLabel(p.hour),
+          visitors: Math.max(0, Math.round((p.avg_percentage ?? 0))),
+        }))
+        setData(points)
+      })
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [selectedDay, selectedGym, slugToLabel])
+
+  // gymOptions defined above
 
   const dayOptions = [
     { value: "monday", label: "Monday" },

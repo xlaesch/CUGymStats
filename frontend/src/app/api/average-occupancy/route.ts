@@ -18,6 +18,7 @@ const schema = z.object({
 		.regex(/^\d+$/)
 		.transform((s) => parseInt(s, 10))
 		.refine((n) => n >= 0 && n <= 6, { message: "dayofweek must be 0-6" }),
+	location: z.string().optional(),
 });
 
 function tooMany(ip: string): boolean {
@@ -57,15 +58,20 @@ export async function GET(req: Request) {
 		}
 
 		const url = new URL(req.url);
-		const parse = schema.safeParse({ dayofweek: url.searchParams.get("dayofweek") ?? "" });
-			if (!parse.success) {
-				const first = parse.error.issues?.[0]?.message || "Invalid input";
-				return NextResponse.json({ error: first }, { status: 400 });
-			}
+		const parse = schema.safeParse({
+			dayofweek: url.searchParams.get("dayofweek") ?? "",
+			location: url.searchParams.get("location") ?? undefined,
+		});
+		if (!parse.success) {
+			const first = parse.error.issues?.[0]?.message || "Invalid input";
+			return NextResponse.json({ error: first }, { status: 400 });
+		}
+		const defaultLocation = process.env.DEFAULT_LOCATION || "Helen Newman Fitness Center";
+		const location = (parse.data.location && parse.data.location.trim()) || defaultLocation;
 		const { dayofweek } = parse.data;
 
 		// Cache key scoped to input
-		const cacheKey = `avg:${dayofweek}`;
+		const cacheKey = `avg:${location}:${dayofweek}`;
 		const cached = cache.get(cacheKey);
 		const now = Math.floor(Date.now() / 1000);
 		if (cached && cached.expiresAt > now) {
@@ -75,14 +81,16 @@ export async function GET(req: Request) {
 		// Call the Domain API (Flask)
 		const domainBase = process.env.DOMAIN_API_BASE || "http://127.0.0.1:5000";
 		const path = "/api/average-occupancy";
-		const qs = new URLSearchParams({ dayofweek: String(dayofweek) }).toString();
+		const qs = "";
 		const body = ""; // GET body is empty
-			const headers = {
-				...hmacSign("GET", path, qs, body),
-				"X-Forwarded-For": ip,
-			} as Record<string, string>;
+		const headers = {
+			...hmacSign("GET", path, qs, body),
+			"X-Forwarded-For": ip,
+			"X-Location": location,
+			"X-Day-Of-Week": String(dayofweek),
+		} as Record<string, string>;
 
-		const resp = await fetch(`${domainBase}${path}?${qs}`, {
+		const resp = await fetch(`${domainBase}${path}`, {
 			method: "GET",
 			headers,
 			// Do NOT forward cookies or secrets to the browser
